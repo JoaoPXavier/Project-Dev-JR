@@ -1,0 +1,142 @@
+[
+  {
+    "id": "integration-tab",
+    "type": "tab",
+    "label": "Integration Logic",
+    "disabled": false,
+    "info": "This flow handles database and MQTT integration for CEP and broker search events."
+  },
+  {
+    "id": "cep-link-in",
+    "type": "link in",
+    "z": "integration-tab",
+    "name": "From CEP Flow",
+    "links": [],
+    "x": 140,
+    "y": 140,
+    "wires": [
+      [
+        "cep-function-sql",
+        "mqtt-cep-publish"
+      ]
+    ]
+  },
+  {
+    "id": "broker-link-in",
+    "type": "link in",
+    "z": "integration-tab",
+    "name": "From Broker Catalog Flow",
+    "links": [],
+    "x": 140,
+    "y": 220,
+    "wires": [
+      [
+        "broker-function-sql",
+        "mqtt-broker-publish"
+      ]
+    ]
+  },
+  {
+    "id": "cep-function-sql",
+    "type": "function",
+    "z": "integration-tab",
+    "name": "Prepare CEP SQL",
+    "func": "// Receives msg.payload.cep from CEP search\nvar cep = msg.payload.cep || \"UNKNOWN\";\nvar now = new Date().toISOString();\nmsg.topic = `INSERT INTO cep_buscas (cep, timestamp) VALUES ('${cep}', '${now}')`;\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 140,
+    "wires": [
+      [
+        "cep-sql-insert"
+      ]
+    ]
+  },
+  {
+    "id": "broker-function-sql",
+    "type": "function",
+    "z": "integration-tab",
+    "name": "Prepare Broker SQL",
+    "func": "// Log timestamp only\nvar now = new Date().toISOString();\nmsg.topic = `INSERT INTO corretoras_buscas (timestamp) VALUES ('${now}')`;\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 220,
+    "wires": [
+      [
+        "broker-sql-insert"
+      ]
+    ]
+  },
+  {
+    "id": "cep-sql-insert",
+    "type": "sqlite",
+    "z": "integration-tab",
+    "mydb": "buscas-db",
+    "name": "Insert CEP Search",
+    "sqlquery": "msg.topic",
+    "output": "none",
+    "x": 520,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "broker-sql-insert",
+    "type": "sqlite",
+    "z": "integration-tab",
+    "mydb": "buscas-db",
+    "name": "Insert Broker Catalog",
+    "sqlquery": "msg.topic",
+    "output": "none",
+    "x": 540,
+    "y": 220,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "mqtt-cep-publish",
+    "type": "mqtt out",
+    "z": "integration-tab",
+    "name": "MQTT Publish CEP",
+    "topic": "busca/cep",
+    "qos": "",
+    "retain": "",
+    "broker": "mqtt-local",
+    "x": 520,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "mqtt-broker-publish",
+    "type": "mqtt out",
+    "z": "integration-tab",
+    "name": "MQTT Publish Broker",
+    "topic": "busca/corretora",
+    "qos": "",
+    "retain": "",
+    "broker": "mqtt-local",
+    "x": 540,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "buscas-db",
+    "type": "sqlitedb",
+    "z": "",
+    "db": "buscas.db",
+    "mode": "READWRITE"
+  },
+  {
+    "id": "mqtt-local",
+    "type": "mqtt-broker",
+    "name": "Local Mosquitto",
+    "broker": "localhost",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true
+  }
+]

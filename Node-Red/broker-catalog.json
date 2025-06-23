@@ -1,0 +1,77 @@
+[
+  {
+    "id": "b1c2d3e4f5g6h7i8",
+    "type": "tab",
+    "label": "Catálogo de Corretoras",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "http-in-brokers",
+    "type": "http in",
+    "z": "b1c2d3e4f5g6h7i8",
+    "name": "Receber requisição catálogo",
+    "url": "/catalogo-corretoras",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 180,
+    "y": 160,
+    "wires": [
+      [
+        "http-request-brokers"
+      ]
+    ]
+  },
+  {
+    "id": "http-request-brokers",
+    "type": "http request",
+    "z": "b1c2d3e4f5g6h7i8",
+    "name": "Buscar corretoras na BrasilAPI",
+    "method": "GET",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "https://brasilapi.com.br/api/cvm/corretoras/v1",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 420,
+    "y": 160,
+    "wires": [
+      [
+        "function-format-brokers"
+      ]
+    ]
+  },
+  {
+    "id": "function-format-brokers",
+    "type": "function",
+    "z": "b1c2d3e4f5g6h7i8",
+    "name": "Formatar lista corretoras",
+    "func": "const brokers = msg.payload;\nconst estados = [...new Set(brokers.map(b => b.uf).filter(Boolean))].sort();\n\nconst dropdown = `<select id='estado' onchange='filtrarEstado()'>\n<option value='TODOS'>Todos os Estados</option>\n${estados.map(uf => `<option value='${uf}'>${uf}</option>`).join('')}\n</select>`;\n\nconst rows = brokers.map(b =>\n  `<tr data-uf='${b.uf}'>\n    <td>${b.nome_social}</td>\n    <td>${b.municipio || '-'}</td>\n    <td>${b.cnpj}</td>\n  </tr>`\n).join('');\n\nmsg.payload = `\n<!DOCTYPE html>\n<html lang=\"pt-br\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Catálogo de Corretoras</title>\n  <style>\n    body { font-family: Arial, sans-serif; padding: 20px; background: #f2f2f2; }\n    h1 { text-align: center; color: #004466; }\n    .filtro { text-align: right; margin-bottom: 10px; }\n    table { width: 100%; border-collapse: collapse; background: white; }\n    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ccc; }\n    th { background-color: #0077cc; color: white; }\n    tr:hover { background-color: #f1f1f1; }\n  </style>\n</head>\n<body>\n  <h1>Catálogo de Corretoras</h1>\n  <div class=\"filtro\">\n    Filtrar por estado: ${dropdown}\n  </div>\n  <table>\n    <thead>\n      <tr><th>Nome</th><th>Cidade</th><th>CNPJ</th></tr>\n    </thead>\n    <tbody id=\"tabela-corretoras\">\n      ${rows}\n    </tbody>\n  </table>\n  <script>\n    function filtrarEstado() {\n      const uf = document.getElementById('estado').value;\n      const linhas = document.querySelectorAll('#tabela-corretoras tr');\n      linhas.forEach(linha => {\n        if (uf === 'TODOS' || linha.getAttribute('data-uf') === uf) {\n          linha.style.display = '';\n        } else {\n          linha.style.display = 'none';\n        }\n      });\n    }\n  </script>\n</body>\n</html>`;\n\nmsg.headers = { 'Content-Type': 'text/html' };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 700,
+    "y": 160,
+    "wires": [
+      [
+        "http-response-brokers"
+      ]
+    ]
+  },
+  {
+    "id": "http-response-brokers",
+    "type": "http response",
+    "z": "b1c2d3e4f5g6h7i8",
+    "name": "Enviar resposta catálogo",
+    "statusCode": "",
+    "headers": {},
+    "x": 960,
+    "y": 160,
+    "wires": []
+  }
+]

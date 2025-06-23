@@ -1,0 +1,54 @@
+                                                           Lógica De Programação
+
+Exercício 2:
+
+a) (A > C) and (C <= D)
+   5 > 3  Verdadeiro.
+   3 <= 6 Verdadeiro.
+
+Resultado: As duas são verdadeiras.
+
+
+b) (A+B) > 10 or ((A+B) = (C+D))
+   5 + 4 = 9 Verdadeiro
+   9 > 10 Falso.
+   5 + 4 = 9 Verdadeiro 3 + 6 = 9 Verdadeiro.
+
+   Resultado: Pelo menos um foi verdadeiro, o resultado foi verdadeiro.
+
+
+c) (A >= C) and (D >= C)
+   5 >= 3 Verdadeiro.
+   6 >= 3 Verdadeiro.
+   
+   Resultado: As duas foram verdadeiras.
+
+
+d) ((A = C) and (B >= A)) or ((C + D) > 9)
+   5 = 3 Falso.
+   4 >= 5 Falso.
+   3 + 6 = 9 > 9 Falso.
+
+   Resultado: Todos foram falso.
+
+
+
+e) (A < D) AND ((A + 5) >= 10) AND ((C + D) > B) AND ((A + B - C) = 6)
+   5 < 6 Verdadeiro.
+   5 + 5 >= 10 Verdadeiro.
+   3 + 6 = 9 > 4 Verdadeiro.
+   5 + 4 = 9 - 3 = 6 Verdadeiro.
+
+   Resultado: Todas foram verdadeiras.
+
+  
+                                                                           Resultado Final:
+
+
+A- Verdadeiro
+B- Verdadeiro
+C- Verdadeiro
+D- Falso
+E- Verdadeiro
+
+

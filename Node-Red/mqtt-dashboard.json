@@ -1,0 +1,144 @@
+[
+  {
+    "id": "mqtt_dash_tab",
+    "type": "tab",
+    "label": "MQTT Dashboard",
+    "disabled": false,
+    "info": "Painel em tempo real para monitorar tópicos MQTT busca/cep e busca/corretora"
+  },
+  {
+    "id": "mqtt_in_cep",
+    "type": "mqtt in",
+    "z": "mqtt_dash_tab",
+    "name": "Tópico busca/cep",
+    "topic": "busca/cep",
+    "qos": "0",
+    "datatype": "auto",
+    "broker": "mqtt_broker",
+    "x": 140,
+    "y": 100,
+    "wires": [
+      [
+        "function_format_cep"
+      ]
+    ]
+  },
+  {
+    "id": "mqtt_in_corretora",
+    "type": "mqtt in",
+    "z": "mqtt_dash_tab",
+    "name": "Tópico busca/corretora",
+    "topic": "busca/corretora",
+    "qos": "0",
+    "datatype": "auto",
+    "broker": "mqtt_broker",
+    "x": 160,
+    "y": 160,
+    "wires": [
+      [
+        "function_format_corretora"
+      ]
+    ]
+  },
+  {
+    "id": "function_format_cep",
+    "type": "function",
+    "z": "mqtt_dash_tab",
+    "name": "Formatar mensagem CEP",
+    "func": "// Prepara mensagem para painel\nmsg.payload = `CEP: ${msg.payload}`;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 380,
+    "y": 100,
+    "wires": [
+      [
+        "ui_template_panel"
+      ]
+    ]
+  },
+  {
+    "id": "function_format_corretora",
+    "type": "function",
+    "z": "mqtt_dash_tab",
+    "name": "Formatar mensagem Corretora",
+    "func": "// Prepara mensagem para painel\nmsg.payload = `Corretora: ${msg.payload}`;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 400,
+    "y": 160,
+    "wires": [
+      [
+        "ui_template_panel"
+      ]
+    ]
+  },
+  {
+    "id": "ui_template_panel",
+    "type": "template",
+    "z": "mqtt_dash_tab",
+    "name": "Painel MQTT em tempo real",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "html",
+    "syntax": "mustache",
+    "template": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Painel MQTT em Tempo Real</title>\n  <style>\n    body { font-family: monospace; background: #1e1e1e; color: #00ff00; padding: 20px; }\n    #log { height: 400px; overflow-y: scroll; background: #000000aa; padding: 10px; border-radius: 5px; }\n    .msg { margin-bottom: 8px; }\n  </style>\n</head>\n<body>\n  <h2>Painel MQTT em Tempo Real</h2>\n  <div id=\"log\"></div>\n  <script>\n    const log = document.getElementById('log');\n    const evtSource = new EventSource('/mqtt/events');\n    evtSource.onmessage = function(e) {\n      const div = document.createElement('div');\n      div.className = 'msg';\n      div.textContent = e.data;\n      log.appendChild(div);\n      log.scrollTop = log.scrollHeight;\n    };\n  </script>\n</body>\n</html>",
+    "output": "str",
+    "x": 660,
+    "y": 140,
+    "wires": [
+      [
+        "http_response_panel"
+      ]
+    ]
+  },
+  {
+    "id": "http_in_panel",
+    "type": "http in",
+    "z": "mqtt_dash_tab",
+    "name": "Página do painel MQTT",
+    "url": "/mqtt-dashboard",
+    "method": "get",
+    "upload": false,
+    "x": 140,
+    "y": 220,
+    "wires": [
+      [
+        "ui_template_panel"
+      ]
+    ]
+  },
+  {
+    "id": "http_response_panel",
+    "type": "http response",
+    "z": "mqtt_dash_tab",
+    "name": "Resposta painel MQTT",
+    "statusCode": "",
+    "headers": {
+      "Content-Type": "text/html"
+    },
+    "x": 900,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "mqtt_broker",
+    "type": "mqtt-broker",
+    "name": "Broker Local",
+    "broker": "localhost",
+    "port": "1883",
+    "clientid": "node-red-mqtt-dashboard",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  }
+]
