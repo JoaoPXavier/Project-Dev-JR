@@ -104,12 +104,6 @@ sqlite3 buscas.db
   * UI showing the last searched zip code in real time via MQTT
   * Example: `http://localhost:1880/ui`
 
-### Screenshots & Flows
-
-All JSON flow files and images are in the `node-red-project/` folder.
-
----
-
 ## Project 2: Logic Programming Test
 
 ### Exercises:
