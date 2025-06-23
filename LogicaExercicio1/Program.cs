@@ -1,19 +1,19 @@
 ﻿using System;
 namespace IdadeEmDias
 {
-  //Classe que representa a idade de uma pessoa com atributos para anos, meses e dias.
+  //Class representing a person's age with attributes for years, months, and days.
   public class Idade
   {
-    //Propriedade encapsulada da idade
+    //Encapsulated property of age.
     public int Anos { get; private set; }
     public int Meses { get; private set; }
     public int Dias { get; private set; }
 
-    // Construtor da classe idade com validação
+    // Age class constructor with validation.
 
     public Idade(int anos, int meses, int dias)
     {
-      // Validação básica para evitar valores negativos
+      //Basic validation to avoid negative values
       if (anos < 0 || meses < 0 || dias < 0)
         throw new ArgumentException("Anos, meses e dias não podem ser negativos.");
 
@@ -28,8 +28,7 @@ namespace IdadeEmDias
       Dias = dias;
 
     }
-    // Calcula a idade total em dias (1 ano = 365 dias, 1 mês = 30 dias)
-
+    //Calculates total age in days (1 year = 365 days, 1 month = 30 days).
 
     public int CalcularIdadeEmDias()
     {
@@ -93,7 +92,7 @@ namespace IdadeEmDias
       }
     }
 
-    //Metodo para ler inteiros válidados
+    //Method to read valid integers
     private static int LerEntradaInt(string mensagem)
     {
       int valor;
@@ -102,7 +101,7 @@ namespace IdadeEmDias
         Console.WriteLine(mensagem);
         string? entrada = Console.ReadLine();
 
-        //Valida se a entrada é um inteiro não negativo
+        //Validates if the input is a non-negative integer
         if (int.TryParse(entrada, out valor) && valor >= 0)
           return valor;
 

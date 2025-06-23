@@ -31,7 +31,7 @@
     "fieldType": "msg",
     "format": "html",
     "syntax": "mustache",
-    "template": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Busca de CEP</title>\n  <style>\n    body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }\n    .container { max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }\n    h1 { text-align: center; color: #004466; }\n    input, button { padding: 10px; width: 100%; margin: 10px 0; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }\n    button { background-color: #0077cc; color: white; border: none; cursor: pointer; }\n    button:hover { background-color: #005fa3; }\n    .result, .history { margin-top: 20px; }\n    table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ccc; }\n    th { background-color: #0077cc; color: white; }\n    tr:hover { background-color: #f1f1f1; }\n    footer { text-align: center; font-size: 14px; color: #888; margin-top: 40px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>Vamos encontrar a corretora mais próxima de você</h1>\n    <input id=\"cep\" placeholder=\"Digite o CEP (ex: 30110-008)\" />\n    <button onclick=\"buscar()\">Buscar</button>\n    <button onclick=\"limpar()\" style=\"background-color: #cc0000;\">Limpar Histórico</button>\n    <div class=\"result\" id=\"resultado\"></div>\n    <footer>Desenvolvido por João Pereira</footer>\n  </div>\n  <script>\n    let historico = [];\n    function buscar() {\n      const input = document.getElementById('cep');\n      let cep = input.value.replace(/\\D/g, '');\n      if (cep.length !== 8) return alert('Digite um CEP válido com 8 dígitos.');\n      cep = cep.replace(/(\\d{5})(\\d{3})/, '$1-$2');\n      fetch(`/zip_searcher/${cep}`).then(res => res.json()).then(data => {\n        historico.unshift(data);\n        renderHistorico();\n        input.value = '';\n      }).catch(() => alert('Erro ao buscar o CEP.'));\n    }\n    function renderHistorico() {\n      const r = document.getElementById('resultado');\n      if (!historico.length) return r.innerHTML = '';\n      r.innerHTML = historico.map(data => {\n        const c = data.cep;\n        const b = data.brokers;\n        return `<div style='margin-top:30px;'>\n          <h3>CEP: ${c.cep} - ${c.city}/${c.state}</h3>\n          <p><strong>Rua:</strong> ${c.street}</p>\n          <p><strong>Bairro:</strong> ${c.neighborhood}</p>\n          ${b.length ? `\n            <table>\n              <thead><tr><th>Corretora</th><th>Cidade</th><th>CNPJ</th></tr></thead>\n              <tbody>${b.map(c => `<tr><td>${c.nome_social}</td><td>${c.municipio}</td><td>${c.cnpj}</td></tr>`).join('')}</tbody>\n            </table>` : '<p><em>Nenhuma corretora encontrada para esse CEP.</em></p>'}\n        </div>`;\n      }).join('');\n    }\n    function limpar() {\n      historico = [];\n      document.getElementById('resultado').innerHTML = '';\n    }\n  </script>\n</body>\n</html>",
+    "template": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Busca de CEP</title>\n  <style>\n    body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }\n    .container { max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }\n    h1 { text-align: center; color: #004466; }\n    input, button { padding: 10px; width: 100%; margin: 10px 0; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }\n    button { background-color: #0077cc; color: white; border: none; cursor: pointer; }\n    button:hover { background-color: #005fa3; }\n    .result, .history { margin-top: 20px; }\n    table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ccc; }\n    th { background-color: #0077cc; color: white; }\n    tr:hover { background-color: #f1f1f1; }\n    footer { text-align: center; font-size: 14px; color: #888; margin-top: 40px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>Vamos encontrar a corretora mais próxima de você</h1>\n    <input id=\"cep\" placeholder=\"Digite o CEP (ex: 30110-008)\" />\n    <button onclick=\"buscar()\">Buscar</button>\n    <button onclick=\"limpar()\" style=\"background-color: #cc0000;\">Limpar Histórico</button>\n    <div id=\"resultadoCep\"></div>\n    <div class=\"result\" id=\"resultado\"></div>\n    <footer>Desenvolvido por João Pereira</footer>\n  </div>\n  <script>\n    let historico = [];\n    function buscar() {\n      const input = document.getElementById('cep');\n      let cep = input.value.replace(/\\D/g, '');\n      if (cep.length !== 8) return alert('Digite um CEP válido com 8 dígitos.');\n      cep = cep.replace(/(\\d{5})(\\d{3})/, '$1-$2');\n      fetch(`/zip_searcher/${cep}`).then(res => res.json()).then(data => {\n        historico.unshift(data);\n        document.getElementById('resultadoCep').innerHTML = `<h3>CEP Consultado: ${data.cep.cep}</h3>`;\n        renderHistorico();\n        input.value = '';\n      }).catch(() => alert('Erro ao buscar o CEP.'));\n    }\n    function renderHistorico() {\n      const r = document.getElementById('resultado');\n      if (!historico.length) return r.innerHTML = '';\n      r.innerHTML = historico.map(data => {\n        const c = data.cep;\n        const b = data.brokers;\n        return `<div style='margin-top:30px;'>\n          <p><strong>Rua:</strong> ${c.street}</p>\n          <p><strong>Bairro:</strong> ${c.neighborhood}</p>\n          <p><strong>Cidade:</strong> ${c.city}</p>\n          <p><strong>Estado:</strong> ${c.state}</p>\n          ${b.length ? `\n            <table>\n              <thead><tr><th>Corretora</th><th>Cidade</th><th>CNPJ</th></tr></thead>\n              <tbody>${b.map(c => `<tr><td>${c.nome_social}</td><td>${c.municipio}</td><td>${c.cnpj}</td></tr>`).join('')}</tbody>\n            </table>` : '<p><em>Nenhuma corretora encontrada para esse CEP.</em></p>'}\n        </div>`;\n      }).join('');\n    }\n    function limpar() {\n      historico = [];\n      document.getElementById('resultado').innerHTML = '';\n      document.getElementById('resultadoCep').innerHTML = '';\n    }\n  </script>\n</body>\n</html>",
     "x": 340,
     "y": 80,
     "wires": [
@@ -138,7 +138,7 @@
     "type": "function",
     "z": "zip_tab",
     "name": "Merge CEP + corretoras + MQTT",
-    "func": "const cep = msg.cepData;\nconst brokers = msg.payload.filter(b => b.municipio?.toLowerCase() === cep.city.toLowerCase());\n\n// Mensagens para MQTT\nconst msgCep = { topic: 'busca/cep', payload: cep.cep };\nconst msgBrokers = { topic: 'busca/corretora', payload: brokers };\n\n// Mensagem para resposta HTTP\nmsg.payload = { cep, brokers };\n\n// Retorna múltiplas mensagens: HTTP, MQTT cep, MQTT corretora\nreturn [msg, msgCep, msgBrokers];",
+    "func": "const cep = msg.cepData;\nconst brokers = msg.payload.filter(b => b.municipio?.toLowerCase() === cep.city.toLowerCase());\n\n// MQTT\nconst msgCep = { topic: 'busca/cep', payload: cep.cep };\nconst msgBrokers = { topic: 'busca/corretora', payload: brokers };\n\nmsg.payload = { cep, brokers };\nreturn [msg, msgCep, msgBrokers];",
     "outputs": 3,
     "x": 1180,
     "y": 160,
@@ -190,147 +190,5 @@
     "x": 1420,
     "y": 200,
     "wires": []
-  },
-  {
-    "id": "mqtt_dash_tab",
-    "type": "tab",
-    "label": "MQTT Dashboard",
-    "disabled": false,
-    "info": "Painel em tempo real para monitorar tópicos MQTT busca/cep e busca/corretora"
-  },
-  {
-    "id": "mqtt_in_cep",
-    "type": "mqtt in",
-    "z": "mqtt_dash_tab",
-    "name": "Tópico busca/cep",
-    "topic": "busca/cep",
-    "qos": "0",
-    "datatype": "auto",
-    "broker": "mqtt_broker",
-    "x": 160,
-    "y": 100,
-    "wires": [
-      [
-        "function_format_cep"
-      ]
-    ]
-  },
-  {
-    "id": "mqtt_in_corretora",
-    "type": "mqtt in",
-    "z": "mqtt_dash_tab",
-    "name": "Tópico busca/corretora",
-    "topic": "busca/corretora",
-    "qos": "0",
-    "datatype": "auto",
-    "broker": "mqtt_broker",
-    "x": 180,
-    "y": 160,
-    "wires": [
-      [
-        "function_format_corretora"
-      ]
-    ]
-  },
-  {
-    "id": "function_format_cep",
-    "type": "function",
-    "z": "mqtt_dash_tab",
-    "name": "Formatar mensagem CEP",
-    "func": "// Prepara mensagem para painel\nmsg.payload = `CEP: ${msg.payload}`;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 400,
-    "y": 100,
-    "wires": [
-      [
-        "ui_template_panel"
-      ]
-    ]
-  },
-  {
-    "id": "function_format_corretora",
-    "type": "function",
-    "z": "mqtt_dash_tab",
-    "name": "Formatar mensagem Corretora",
-    "func": "let brokers = msg.payload;\nif (Array.isArray(brokers)) {\n    let nomes = brokers.map(b => b.nome_social || 'N/D').join(', ');\n    msg.payload = `Corretoras encontradas: ${nomes}`;\n} else {\n    msg.payload = `Corretora: ${JSON.stringify(msg.payload)}`;\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 420,
-    "y": 160,
-    "wires": [
-      [
-        "ui_template_panel"
-      ]
-    ]
-  },
-  {
-    "id": "ui_template_panel",
-    "type": "template",
-    "z": "mqtt_dash_tab",
-    "name": "Painel MQTT em tempo real",
-    "field": "payload",
-    "fieldType": "msg",
-    "format": "html",
-    "syntax": "mustache",
-    "template": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Painel MQTT em Tempo Real</title>\n  <style>\n    body { font-family: monospace; background: #1e1e1e; color: #00ff00; padding: 20px; }\n    #log { height: 400px; overflow-y: scroll; background: #000000aa; padding: 10px; border-radius: 5px; }\n    .msg { margin-bottom: 8px; }\n  </style>\n</head>\n<body>\n  <h2>Painel MQTT em Tempo Real</h2>\n  <div id=\"log\"></div>\n  <script>\n    const log = document.getElementById('log');\n    const evtSource = new EventSource('/mqtt/events');\n    evtSource.onmessage = function(e) {\n      const div = document.createElement('div');\n      div.className = 'msg';\n      div.textContent = e.data;\n      log.appendChild(div);\n      log.scrollTop = log.scrollHeight;\n    };\n  </script>\n</body>\n</html>",
-    "output": "str",
-    "x": 660,
-    "y": 140,
-    "wires": [
-      [
-        "http_response_panel"
-      ]
-    ]
-  },
-  {
-    "id": "http_in_panel",
-    "type": "http in",
-    "z": "mqtt_dash_tab",
-    "name": "Página do painel MQTT",
-    "url": "/mqtt-dashboard",
-    "method": "get",
-    "upload": false,
-    "x": 160,
-    "y": 220,
-    "wires": [
-      [
-        "ui_template_panel"
-      ]
-    ]
-  },
-  {
-    "id": "http_response_panel",
-    "type": "http response",
-    "z": "mqtt_dash_tab",
-    "name": "Resposta painel MQTT",
-    "statusCode": "",
-    "headers": {
-      "Content-Type": "text/html"
-    },
-    "x": 900,
-    "y": 140,
-    "wires": []
-  },
-  {
-    "id": "mqtt_broker",
-    "type": "mqtt-broker",
-    "name": "Broker Local",
-    "broker": "localhost",
-    "port": "1883",
-    "clientid": "node-red-mqtt-dashboard",
-    "usetls": false,
-    "compatmode": true,
-    "keepalive": "60",
-    "cleansession": true,
-    "birthTopic": "",
-    "birthQos": "0",
-    "birthPayload": "",
-    "closeTopic": "",
-    "closeQos": "0",
-    "closePayload": "",
-    "willTopic": "",
-    "willQos": "0",
-    "willPayload": ""
   }
 ]

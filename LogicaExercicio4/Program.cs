@@ -1,9 +1,7 @@
-﻿using System; //Importa funcionalidade básicas do .NET
+﻿using System; 
 
-//Define o namespace do projeto
 namespace IntervaloValores
 {
-  //Classe principal que contém o ponto de entrada do programa
   class Program
   {
     static void Main(string[] args)
@@ -14,7 +12,7 @@ namespace IntervaloValores
       intervalo.ImprimirResultados();
     }
   }
-  //Classe que separa lógica de contagem e validação
+  //Class that separates counting and validation logic
   class Intervalo
   {
     private int contadorDentro;
@@ -25,7 +23,7 @@ namespace IntervaloValores
       contadorFora = 0;
     }
 
-    //Lê 10 números e classifica dentro ou fora do intervalo [1, 100]
+    //Reads 10 numbers and sorts them into or out of the range [1, 100]
     public void LerValores()
     {
       for (int i = 1; i <= 10; i++)
@@ -45,7 +43,7 @@ namespace IntervaloValores
         else
         {
           Console.WriteLine("Valor inválido. Por favor, insira um número inteiro");
-          i--; // Repetição em caso de entrada inválida
+          i--; //Retry on invalid input
         }
       }
     }

@@ -6,7 +6,7 @@ namespace JogoDaVelha
   {
     static void Main(string[] args)
     {
-      //Menu de seleção do modo de jogo
+      //Game Mode Selection Menu
       Console.WriteLine(" Jogo Da Velha ");
       Console.WriteLine("Escolha o modo de jogo");
       Console.WriteLine("1 - Jogador vs Máquina");
@@ -18,7 +18,7 @@ namespace JogoDaVelha
       bool jogador1Auto = false;
       bool jogador2Auto = false;
 
-      //Define os modos com base na opção escolhida
+      //Sets modes based on the option chosen
       switch (escolha)
       {
         case "1":
@@ -47,7 +47,7 @@ namespace JogoDaVelha
       }
 
 
-      //Inicializa e inicia o jogo
+      //Initialize and start the game
       Jogo jogo = new Jogo(jogador1Auto, jogador2Auto);
       jogo.Iniciar();
     }
@@ -103,7 +103,7 @@ namespace JogoDaVelha
         }
 
 
-        //Verificar vitória ou empate
+        //Check win or draw
         if (tabuleiro.VerificarVitoria(jogadorAtual.Marcador))
         {
           tabuleiro.Exibir();
@@ -118,7 +118,7 @@ namespace JogoDaVelha
           break;
         }
 
-        //Alternar jogador
+        //Switch Player
         jogadorAtual = (jogadorAtual == jogador1) ? jogador2 : jogador1;
 
       }
@@ -158,7 +158,7 @@ namespace JogoDaVelha
       return true;
     }
 
-    //Verifica as combinações de vitórias possíveis
+    //Check the possible winning combinations
     public bool VerificarVitoria(string marcador)
     {
 
@@ -172,7 +172,7 @@ namespace JogoDaVelha
              (posicoes[2] == marcador && posicoes[4] == marcador && posicoes[6] == marcador);
     }
 
-    //Verifica se todas as posições foram preenchidas
+    //Checks if all positions are filled
     public bool VerificarEmpate()
     {
       foreach (var posicao in posicoes)
