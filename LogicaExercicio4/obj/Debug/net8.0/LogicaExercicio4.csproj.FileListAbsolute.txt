@@ -1,0 +1,15 @@
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\bin\Debug\net8.0\LogicaExercicio4.exe
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\bin\Debug\net8.0\LogicaExercicio4.deps.json
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\bin\Debug\net8.0\LogicaExercicio4.runtimeconfig.json
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\bin\Debug\net8.0\LogicaExercicio4.dll
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\bin\Debug\net8.0\LogicaExercicio4.pdb
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.AssemblyInfoInputs.cache
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.AssemblyInfo.cs
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.csproj.CoreCompileInputs.cache
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.sourcelink.json
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.dll
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\refint\LogicaExercicio4.dll
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.pdb
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\LogicaExercicio4.genruntimeconfig.cache
+C:\Users\João Victor\Music\ProjetoDevJR\LogicaExercicio4\obj\Debug\net8.0\ref\LogicaExercicio4.dll
